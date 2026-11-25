@@ -1,0 +1,10 @@
+# Derived from the demo disk: keep local
+_reference/
+build/
+export/frames/
+export/audio_*.wav
+# Xcode (regenerate with tools/build_apple.sh)
+StateOfTheArt.xcodeproj/
+*.xcuserstate
+xcuserdata/
+.DS_Store

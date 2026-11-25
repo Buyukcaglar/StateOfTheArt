@@ -1,0 +1,93 @@
+# XcodeGen spec. Generate with: tools/build_apple.sh (it also refreshes build/gen first).
+name: StateOfTheArt
+options:
+  bundleIdPrefix: com.buyukcaglar
+  deploymentTarget:
+    macOS: "13.0"
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    DEVELOPMENT_TEAM: SZ4F4WP934
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CLANG_ENABLE_OBJC_ARC: YES
+    GCC_C_LANGUAGE_STANDARD: gnu11
+    GCC_OPTIMIZATION_LEVEL: "2"         # the chipset and generated code need it even in Debug
+    DEAD_CODE_STRIPPING: YES
+    WARNING_CFLAGS: "-Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-function"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+targetTemplates:
+  Demo:
+    sources:
+      - path: runtime/cpu
+        excludes: ["*.md"]
+      - path: runtime/amiga
+      - path: runtime/core/exec.c
+      - path: runtime/core/exec.h
+      - path: build/gen               # recompiled demo code (local, derived from the disk)
+        excludes: ["*.inc"]
+      - path: platform/apple
+      - path: _reference/StateOfTheArt.adf
+        buildPhase: resources
+
+targets:
+  StateOfTheArt-macOS:
+    type: application
+    platform: macOS
+    templates: [Demo]
+    sources:
+      - path: platform/macos
+    settings:
+      base:
+        PRODUCT_NAME: State of the Art
+        PRODUCT_BUNDLE_IDENTIFIER: com.buyukcaglar.stateoftheart
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_HARDENED_RUNTIME: YES
+        CODE_SIGN_ENTITLEMENTS: platform/macos/StateOfTheArt.entitlements
+        COMBINE_HIDPI_IMAGES: YES
+    info:
+      path: build/xcode/Info-macOS.plist
+      properties:
+        CFBundleDisplayName: State of the Art
+        LSApplicationCategoryType: public.app-category.entertainment
+        NSHumanReadableCopyright: "State of the Art by Spaceballs (1992), statically recompiled."
+        NSHighResolutionCapable: true
+        NSSupportsAutomaticGraphicsSwitching: true
+
+  StateOfTheArt-iOS:
+    type: application
+    platform: iOS
+    templates: [Demo]
+    sources:
+      - path: platform/ios
+    settings:
+      base:
+        PRODUCT_NAME: State of the Art
+        PRODUCT_BUNDLE_IDENTIFIER: com.buyukcaglar.stateoftheart
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SUPPORTS_MACCATALYST: NO
+    info:
+      path: build/xcode/Info-iOS.plist
+      properties:
+        CFBundleDisplayName: State of the Art
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        ITSAppUsesNonExemptEncryption: false
