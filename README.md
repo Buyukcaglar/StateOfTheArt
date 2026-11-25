@@ -8,6 +8,12 @@ of time (the interpreter remains only as a safety net for code bytes never seen)
 
 ![State of the Art running on the recompiled runtime (frame 2622)](docs/images/screenshot.png)
 
+It runs the **original release** from The Party 1992 (`spb-sota.dms` on scene.org,
+converted to ADF), not the later cracked/fixed re-releases. That version decodes data above
+$80000 and therefore needs **1 MB of chip RAM** (an A500 with the 8372 "Fat Agnus"); on a
+512K-chip machine the loader overwrites the interrupt vectors and crashes. The runtime models
+1 MB chip + 512K slow RAM (`CHIP_SIZE` in `runtime/amiga/amiga.h`).
+
 The disk image (`_reference/StateOfTheArt.adf`) and everything derived from it
 (`build/coverage.txt`, `build/gen/`) stay local; see `.gitignore`.
 
@@ -47,8 +53,8 @@ The disk image (`_reference/StateOfTheArt.adf`) and everything derived from it
 
 * `build/sota_run` (interpreter) vs `build/sota_run_rc` (recompiled): **all 13,000 frames
   (the whole demo, ~4 min 20 s) hash identical**, with 100 % of executed blocks recompiled.
-* Section-by-section comparison against WinUAE (cycle-exact 68000, OCS, 512K+512K)
-  screenshots taken through the ALayer harness.
+* Section-by-section comparison against WinUAE (cycle-exact 68000, OCS) screenshots taken
+  through the ALayer harness, during development on a re-release of the same demo.
 
 ## Build
 

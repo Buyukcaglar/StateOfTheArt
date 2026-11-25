@@ -6,7 +6,7 @@
 
 #define PAGE_SHIFT 8
 #define CHIP_PAGES (CHIP_SIZE >> PAGE_SHIFT)
-#define PAGE_GEN_COUNT ((CHIP_SIZE + SLOW_SIZE) >> PAGE_SHIFT)
+#define PAGE_GEN_COUNT ((int)((CHIP_SIZE + SLOW_SIZE) >> PAGE_SHIFT))
 extern uint32_t page_gen[PAGE_GEN_COUNT];
 
 /* page index for a CPU address (chip mirrors fold), or -1 if not RAM */

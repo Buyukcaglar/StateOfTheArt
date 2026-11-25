@@ -177,7 +177,7 @@ static void dma_word(uint16_t w)
     if (!fd.dma_on || fd.dma_write || !fd.synced) return;
     if ((cs.dmacon & 0x0210) != 0x0210) return;
     chip_ww(cs.dskpt, w);
-    cs.dskpt = (cs.dskpt + 2) & 0x7fffe;
+    cs.dskpt = (cs.dskpt + 2) & CHIP_DMA_MASK;
     if (--fd.words_left <= 0) {
         fd.dma_on = false;
         amiga_log("[disk] DMA done f%llu\n", (unsigned long long)cs.frame);

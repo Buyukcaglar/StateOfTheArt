@@ -57,7 +57,7 @@ static inline void aud_irq(int c) { cs.intreq |= (uint16_t)(0x0080 << c); irq_up
 static void fetch_word(int c)
 {
     Chan *a = &ch[c];
-    a->dat = (uint16_t)(chip_ram[a->ptr & 0x7fffe] << 8 | chip_ram[(a->ptr & 0x7fffe) + 1]);
+    a->dat = (uint16_t)(chip_ram[a->ptr & CHIP_DMA_MASK] << 8 | chip_ram[(a->ptr & CHIP_DMA_MASK) + 1]);
     a->ptr += 2;
     if (--a->len == 0) {
         a->ptr = cs.audlc[c];

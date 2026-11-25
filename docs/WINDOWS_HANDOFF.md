@@ -7,6 +7,10 @@ apps use. Only a Windows host shell is missing (the Apple one is `platform/apple
 ## Recreate the generated code on Windows
 
 `build/coverage.txt` and `build/gen/` are derived from the disk and are not committed.
+The disk is the original Party 1992 release: get `spb-sota.dms` from
+https://files.scene.org/view/parties/1992/theparty92/amiga/demo/spb-sota.dms, convert it to
+ADF (e.g. with xdms: `xdms u spb-sota.dms +StateOfTheArt.adf`; ADF md5
+5f648559a6968ef174e36be06faf9ffd) and place it at `_reference/StateOfTheArt.adf`.
 Regenerate them (or copy them over from the Mac):
 
 1. Build `tools/runner/sota_run.c` + all of `runtime/` + `runtime/core/recomp_none.c`

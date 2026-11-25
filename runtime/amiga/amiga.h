@@ -6,7 +6,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define CHIP_SIZE   0x80000u
+#ifndef CHIP_SIZE
+#define CHIP_SIZE   0x100000u   /* 1 MB: the original release decodes data above $80000 (A500 + 8372 Agnus) */
+#endif
+#define CHIP_DMA_MASK ((CHIP_SIZE - 1) & ~1u)
 #define SLOW_BASE   0xC00000u
 #define SLOW_SIZE   0x80000u
 

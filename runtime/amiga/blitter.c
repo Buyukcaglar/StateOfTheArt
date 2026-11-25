@@ -69,8 +69,8 @@ static void blit_area(int w, int h)
         if (usec) cpt += desc ? -cs.bltmod[2] : cs.bltmod[2];
         if (used) dpt += desc ? -cs.bltmod[3] : cs.bltmod[3];
     }
-    cs.bltpt[0] = apt & 0x7fffe; cs.bltpt[1] = bpt & 0x7fffe;
-    cs.bltpt[2] = cpt & 0x7fffe; cs.bltpt[3] = dpt & 0x7fffe;
+    cs.bltpt[0] = apt & CHIP_DMA_MASK; cs.bltpt[1] = bpt & CHIP_DMA_MASK;
+    cs.bltpt[2] = cpt & CHIP_DMA_MASK; cs.bltpt[3] = dpt & CHIP_DMA_MASK;
     cs.bltdat[0] = adat; cs.bltdat[1] = bdat; cs.bltdat[2] = cdat;
     cs.blit_zero = zero;
 }
@@ -118,8 +118,8 @@ static void blit_line(int len)
         dpt = cpt;
     }
     cs.bltpt[0] = (cs.bltpt[0] & 0x70000) | ((uint32_t)err & 0xffff);
-    cs.bltpt[2] = cpt & 0x7fffe;
-    cs.bltpt[3] = dpt & 0x7fffe;
+    cs.bltpt[2] = cpt & CHIP_DMA_MASK;
+    cs.bltpt[3] = dpt & CHIP_DMA_MASK;
     cs.bltcon0 = (uint16_t)((cs.bltcon0 & 0x0fff) | (ash << 12));
     cs.bltcon1 = (uint16_t)((cs.bltcon1 & 0x0fbf) | (bsh << 12) | (sign ? 0x40 : 0));
     cs.bltdat[2] = cdat;

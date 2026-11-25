@@ -431,7 +431,7 @@ uint16_t custom_read(uint32_t reg)
     }
 }
 
-static inline uint32_t hi(uint32_t old, uint16_t v) { return (old & 0x0000ffff) | ((uint32_t)(v & 0x7) << 16); }
+static inline uint32_t hi(uint32_t old, uint16_t v) { return (old & 0x0000ffff) | ((uint32_t)(v & ((CHIP_SIZE - 1) >> 16)) << 16); }
 static inline uint32_t lo(uint32_t old, uint16_t v) { return (old & 0xffff0000) | (v & 0xfffe); }
 
 static void setclr(uint16_t *r, uint16_t v, uint16_t mask)
