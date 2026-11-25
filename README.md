@@ -6,6 +6,8 @@ cycle-driven A500 chipset runtime. No Kickstart ROM and no emulated CPU are need
 run time: the boot is high-level, and every block the demo executes is compiled ahead
 of time (the interpreter remains only as a safety net for code bytes never seen).
 
+![State of the Art running on the recompiled runtime (frame 2622)](docs/images/screenshot.png)
+
 The disk image (`_reference/StateOfTheArt.adf`) and everything derived from it
 (`build/coverage.txt`, `build/gen/`) stay local; see `.gitignore`.
 
