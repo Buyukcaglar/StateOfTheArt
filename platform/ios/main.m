@@ -141,14 +141,24 @@ static const NSTimeInterval kInfoVisible = 3.0;
         [self presentViewController:a animated:YES completion:nil];
         return;
     }
-    // testing aid: `-SotaShowInfoAtLaunch YES` opens the info card at once
+#if DEBUG
+    // screenshot/testing aid (debug builds only): `-SotaShowInfoAtLaunch YES` opens the info card
     if ([NSUserDefaults.standardUserDefaults boolForKey:@"SotaShowInfoAtLaunch"]) {
         [self showInfo];
         if ([NSUserDefaults.standardUserDefaults boolForKey:@"SotaShowInfoLarge"])
             ((UIViewController *)self.presentedViewController).sheetPresentationController.selectedDetentIdentifier =
                 UISheetPresentationControllerDetentIdentifierLarge;
     }
+#endif
 }
+
+#if DEBUG
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{   // screenshot aid (debug builds only): `-SotaForceLandscape YES`
+    if ([NSUserDefaults.standardUserDefaults boolForKey:@"SotaForceLandscape"]) return UIInterfaceOrientationMaskLandscapeRight;
+    return [super supportedInterfaceOrientations];
+}
+#endif
 
 - (BOOL)prefersStatusBarHidden { return YES; }
 - (BOOL)prefersHomeIndicatorAutoHidden { return YES; }

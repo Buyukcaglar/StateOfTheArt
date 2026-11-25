@@ -8,3 +8,4 @@ StateOfTheArt.xcodeproj/
 *.xcuserstate
 xcuserdata/
 .DS_Store
+export/appstore/

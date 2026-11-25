@@ -216,6 +216,12 @@ static void onFrame(uint64_t frame)
     mach_timebase_info_data_t tb; mach_timebase_info(&tb);
     const double ticksPerSec = 1e9 * tb.denom / tb.numer;
     uint64_t next = mach_absolute_time();
+#if DEBUG
+    // screenshot aid (debug builds only): `-SotaFreezeAtFrame N` runs at full speed to frame N,
+    // then holds that picture
+    uint64_t frameNo = 0;
+    const uint64_t freezeAt = (uint64_t)[NSUserDefaults.standardUserDefaults integerForKey:@"SotaFreezeAtFrame"];
+#endif
     while (atomic_load(&_running)) {
         if (atomic_load(&_pausedFlag)) {
             [_pauseCond lock];
@@ -226,6 +232,13 @@ static void onFrame(uint64_t frame)
         }
         @autoreleasepool { exec_run_frames(1); }
         if (gLoopRequested) [self bootMachine];       // end screen held for 10 s: start over
+#if DEBUG
+        if (freezeAt && ++frameNo <= freezeAt) {
+            if (frameNo == freezeAt) atomic_store(&_pausedFlag, true);
+            next = mach_absolute_time();
+            continue;
+        }
+#endif
         // pace to PAL, nudged by the audio fill level so sound neither starves nor lags
         double fill = audio_available() / kSampleRate;
         double adj = (fill - kAudioTarget) / kAudioTarget;
