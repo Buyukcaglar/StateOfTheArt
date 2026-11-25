@@ -9,7 +9,7 @@ Everything to paste into App Store Connect. Character limits in brackets.
 | Platforms | iOS (iPhone + iPad) **and macOS** (native Mac app, same bundle ID = one universal purchase). Tick both when creating the app record, or add macOS later via "+ Add Platform" |
 | Bundle ID | `com.buyukcaglar.stateoftheart` |
 | SKU | `stateoftheart-1` |
-| Name [30] | `State of the Art` (16). If taken: `State of the Art: Amiga Demo` (28) |
+| Name [30] | `State Of The Art (Amiga-1992)` (30; "State of the Art" was taken) |
 | Primary language | English (U.S.) |
 | Price | Free |
 | Primary / secondary category | Entertainment / Music |

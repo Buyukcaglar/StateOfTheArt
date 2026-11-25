@@ -56,6 +56,7 @@ targets:
         NSHumanReadableCopyright: "State of the Art by Spaceballs (1992), statically recompiled."
         NSHighResolutionCapable: true
         NSSupportsAutomaticGraphicsSwitching: true
+        ITSAppUsesNonExemptEncryption: false
 
   StateOfTheArt-iOS:
     type: application
