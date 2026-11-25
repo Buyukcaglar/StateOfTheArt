@@ -85,3 +85,8 @@ iOS/iPadOS: tap toggles aspect fit (letterboxed) and aspect fill (cropped, never
 * Not modelled: sprite/playfield collisions (CLXDAT reads as no collision), keyboard,
   serial, disk writes, ECS/AGA features.
 * The demo ends on its static end screen; 10 s later it starts again (also on macOS).
+
+## License
+
+The code in this repository is MIT licensed (see `LICENSE`). *State of the Art* itself and
+images taken from it belong to Spaceballs and are not covered by that license.
