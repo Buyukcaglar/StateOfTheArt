@@ -6,7 +6,7 @@ Everything to paste into App Store Connect. Character limits in brackets.
 
 | Field | Value |
 |---|---|
-| Platforms | iOS (iPhone + iPad); optionally macOS (separate archive, same bundle ID = universal purchase) |
+| Platforms | iOS (iPhone + iPad) **and macOS** (native Mac app, same bundle ID = one universal purchase). Tick both when creating the app record, or add macOS later via "+ Add Platform" |
 | Bundle ID | `com.buyukcaglar.stateoftheart` |
 | SKU | `stateoftheart-1` |
 | Name [30] | `State of the Art` (16). If taken: `State of the Art: Amiga Demo` (28) |
@@ -97,13 +97,25 @@ using `-SotaFreezeAtFrame N -SotaForceLandscape YES -SotaFillsView YES`):
 |---|---|---|
 | iPhone 6.9" | 2868 × 1320 | `iphone_1_dragon.png` … `iphone_6_tunnel.png` (frames 1800, 2100, 3300, 4200, 10500, 10800) |
 | iPad 13" | 2752 × 2064 | `ipad_1_dragon.png` … `ipad_6_tunnel.png`, plus `ipad_7_info.png` (info card) |
-| Mac | 2880 × 1800 | not made yet (a capture needs Screen Recording permission) |
+| Mac | 2880 × 1800 | `mac_1_dragon.png` … `mac_6_tunnel.png`: the app's full-screen view (picture letterboxed on black, menu bar hidden), rendered from the runtime's own frames with the app's scaling, since this machine had no Screen Recording permission |
 
 The smaller device sizes are scaled from these by App Store Connect.
+
+## macOS specifics
+
+* Package: `build/appstore/macos/State of the Art.pkg` (signed with *3rd Party Mac Developer Installer*).
+* Sandboxed (`com.apple.security.app-sandbox`), no other entitlements; minimum macOS 13.
+* The macOS version page needs its own screenshots (above) and the same text fields; the
+  description, keywords and review notes can be the same. For the Mac review notes, replace the
+  "Interaction" lines with: "Menu: Demo › Restart (⌘R), Pause (⌘P), Mute (⇧⌘M); View › Full
+  Screen (⌃⌘F); About State of the Art shows the credits; Help has the links."
+* With a native Mac app on the same record, untick "Make this app available" for iPhone/iPad
+  apps on Apple Silicon Macs (Pricing and Availability), so Macs get the native version.
 
 ## Build and upload
 
 ```sh
 tools/archive_appstore.sh          # archives + exports build/appstore/{ios,macos}
-xcrun altool --upload-package build/appstore/ios/*.ipa ...   # or drag into Transporter
+# upload (needs the app record): xcodebuild -exportArchive with destination=upload, for
+# build/appstore/iOS.xcarchive and build/appstore/macOS.xcarchive, or drag the .ipa/.pkg into Transporter
 ```
