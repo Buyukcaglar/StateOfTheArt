@@ -3,6 +3,7 @@
 #import <MetalKit/MetalKit.h>
 #import "../apple/SotaEngine.h"
 #import "../apple/SotaRenderer.h"
+#import "../apple/SotaCredits.h"
 
 @interface SotaView : MTKView
 @end
@@ -25,7 +26,7 @@
 }
 @end
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, NSMenuItemValidation>
 @property (strong) NSWindow *window;
 @property (strong) SotaRenderer *renderer;
 @end
@@ -45,7 +46,7 @@ static NSMenuItem *item(NSString *title, SEL action, NSString *key, NSEventModif
     NSMenu *bar = [NSMenu new];
 
     NSMenu *app = [[NSMenu alloc] initWithTitle:name];
-    [app addItem:item([@"About " stringByAppendingString:name], @selector(orderFrontStandardAboutPanel:), @"", 0)];
+    [app addItem:item([@"About " stringByAppendingString:name], @selector(showAbout:), @"", 0)];
     [app addItem:[NSMenuItem separatorItem]];
     [app addItem:item([@"Hide " stringByAppendingString:name], @selector(hide:), @"h", NSEventModifierFlagCommand)];
     [app addItem:item(@"Hide Others", @selector(hideOtherApplications:), @"h", NSEventModifierFlagCommand | NSEventModifierFlagOption)];
@@ -67,7 +68,16 @@ static NSMenuItem *item(NSString *title, SEL action, NSString *key, NSEventModif
     [win addItem:item(@"Zoom", @selector(performZoom:), @"", 0)];
     NSApp.windowsMenu = win;
 
-    for (NSMenu *m in @[app, demo, view, win]) {
+    NSMenu *help = [[NSMenu alloc] initWithTitle:@"Help"];
+    NSInteger tag = 0;
+    for (SotaLink *l in SotaCredits.links) {
+        NSMenuItem *i = item(l.title, @selector(openLink:), @"", 0);
+        i.tag = tag++;
+        [help addItem:i];
+    }
+    NSApp.helpMenu = help;
+
+    for (NSMenu *m in @[app, demo, view, win, help]) {
         NSMenuItem *top = [NSMenuItem new];
         top.submenu = m;
         [bar addItem:top];
@@ -132,6 +142,47 @@ static NSMenuItem *item(NSString *title, SEL action, NSString *key, NSEventModif
     NSRect r = [self.window frameRectForContentRect:NSMakeRect(0, 0, 704, 568)];
     r.origin = self.window.frame.origin;
     [self.window setFrame:r display:YES animate:YES];
+}
+
+- (void)openLink:(NSMenuItem *)m
+{
+    NSArray<SotaLink *> *links = SotaCredits.links;
+    if (m.tag >= 0 && m.tag < (NSInteger)links.count) [NSWorkspace.sharedWorkspace openURL:links[m.tag].url];
+}
+
+- (void)showAbout:(id)s
+{
+    (void)s;
+    NSMutableAttributedString *t = [NSMutableAttributedString new];
+    NSMutableParagraphStyle *center = [NSMutableParagraphStyle new];
+    center.alignment = NSTextAlignmentCenter;
+    center.paragraphSpacing = 2;
+    void (^add)(NSString *, NSFont *, NSColor *, NSURL *) = ^(NSString *str, NSFont *f, NSColor *c, NSURL *url) {
+        NSMutableDictionary *a = [@{ NSFontAttributeName: f, NSForegroundColorAttributeName: c,
+                                     NSParagraphStyleAttributeName: center } mutableCopy];
+        if (url) a[NSLinkAttributeName] = url;
+        [t appendAttributedString:[[NSAttributedString alloc] initWithString:str attributes:a]];
+    };
+    NSFont *small = [NSFont systemFontOfSize:NSFont.smallSystemFontSize];
+    NSFont *bold = [NSFont boldSystemFontOfSize:NSFont.smallSystemFontSize];
+    add([SotaCredits.subtitle stringByAppendingString:@"\n"], bold, NSColor.labelColor, nil);
+    add([SotaCredits.award stringByAppendingString:@"\n\n"], small, NSColor.secondaryLabelColor, nil);
+    for (SotaCreditLine *c in SotaCredits.credits) {
+        add(c.name, bold, NSColor.labelColor, nil);
+        add([NSString stringWithFormat:@"  %@\n", c.role], small, NSColor.secondaryLabelColor, nil);
+    }
+    add(@"\n", small, NSColor.labelColor, nil);
+    add([SotaCredits.editionText stringByAppendingString:@"\n\n"], small, NSColor.labelColor, nil);
+    for (SotaLink *l in SotaCredits.links) {
+        add(l.title, small, NSColor.linkColor, l.url);
+        add(@"\n", small, NSColor.labelColor, nil);
+    }
+    [NSApp orderFrontStandardAboutPanelWithOptions:@{
+        NSAboutPanelOptionApplicationName: SotaCredits.title,
+        NSAboutPanelOptionCredits: t,
+        NSAboutPanelOptionVersion: @"",
+        @"Copyright": SotaCredits.legal,
+    }];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)m

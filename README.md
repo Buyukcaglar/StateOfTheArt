@@ -81,7 +81,7 @@ Any change to block boundaries (`m68k_ends_block`, the page rule) requires a fre
 ## Controls
 
 macOS: ⌘R restart, ⌘P pause, ⇧⌘M mute, ⌃⌘F full screen, ⌘0 2× size; click or Space = mouse button.
-iOS/iPadOS: tap toggles aspect fit (letterboxed) and aspect fill (cropped, never stretched), remembered between launches; in fill mode drag pans the cropped picture (tap back to fit recentres); pauses when the app is inactive.
+iOS/iPadOS: tap toggles aspect fit (letterboxed) and aspect fill (cropped, never stretched), remembered between launches; in fill mode drag pans the cropped picture (tap back to fit recentres); the ⓘ button (shown briefly after a tap) or a long-press opens the credits/info card; pauses when the app is inactive.
 
 ## Known limitations
 
